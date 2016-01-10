@@ -7,7 +7,7 @@
       
       applicationsModel.find(query, function(error, data) {
         if (error) {
-          response.status(500).send(error).end();
+          return response.status(500).send(error).end();
         }
 
         return response.status(200).send(data).end();
@@ -37,23 +37,49 @@
 
       newApplication.save(function(error, data) {
         if (error) {
-          response.status(500).send(error).end();
+          return response.status(500).send(error).end();
         }
 
         return response.status(201).send(data).end();
       });
     };
 
-    function doRetrieve() {
+    function doRetrieve(requisition, response) {
+      var query = {_id: requisition.params.id};
 
+      applicationsModel.findOne(query, function(error, data) {
+        if (error) {
+          return response.status(400).send(error).end();
+        }
+
+        return response.status(200).send(data).end();
+      });
     };
 
-    function doUpdate() {
+    function doUpdate(requisition, response) {
+      var query = {_id: requisition.params.id};
 
+      var update = requisition.body;
+
+      applicationsModel.update(query, update, function(error, data) {
+        if (error) {
+          return response.status(400).send(error).end();
+        }
+
+        return response.status(200).send(data).end();
+      });
     };
 
-    function doDelete() {
+    function doDelete(requisition, response) {
+      var query = {_id: requisition.params.id};
 
+      applicationsModel.remove(query, function(error, data) {
+        if (error) {
+          return response.status(400).send(error).end();
+        }
+
+        return response.status(200).send(data).end();
+      });
     };
 
     var controller = {
