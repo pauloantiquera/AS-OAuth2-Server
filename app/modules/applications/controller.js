@@ -1,34 +1,32 @@
 (function() {
   function applicationsModuleController(appConfig, dbHandler) {
+    var uidGenerator = require('uid');
     var applicationsModel = require('./model')(appConfig, dbHandler);
+    var responseHandler = require(appConfig.app.modules + '/apiutils/responseHandler');
+    var uidLength = 32;
 
-    function doListAll(requisition, response) {
+    function doListAll(request, response, next) {
       var query = {};
-      
-      applicationsModel.find(query, function(error, data) {
-        if (error) {
-          return response.status(500).send(error).end();
-        }
 
-        return response.status(200).send(data).end();
+      applicationsModel.find(query, function(error, data) {
+        responseHandler(error, request, response, data);        
       });
     };
 
-    function generateABust() {
-      var date = new Date();
-      return date.getTime();
+    function generateUID() {
+      return uidGenerator(uidLength);
     };
 
     function generateClientId() {
-      return 'THISISACLIENTID' + generateABust();
+      return generateUID();
     };
 
     function generateClientSecret() {
-      return 'THISISACLIENTSECRET' + generateABust();
+      return generateUID();
     };
 
-    function doCreate(requisition, response) {
-      var data = requisition.body;
+    function doCreate(request, response, next) {
+      var data = request.body;
 
       data.clientId = generateClientId();
       data.clientSecret = generateClientSecret();
@@ -36,49 +34,39 @@
       var newApplication = new applicationsModel(data);
 
       newApplication.save(function(error, data) {
-        if (error) {
-          return response.status(500).send(error).end();
-        }
-
-        return response.status(201).send(data).end();
+        responseHandler(error, request, response, data._id);
       });
     };
 
-    function doRetrieve(requisition, response) {
-      var query = {_id: requisition.params.id};
+    function doRetrieve(request, response) {
+      var query = {_id: request.params.id};
 
       applicationsModel.findOne(query, function(error, data) {
-        if (error) {
-          return response.status(400).send(error).end();
+        if (!error && !data) {
+          error = {
+            status: 404,
+            message: 'Not found'
+          };
         }
-
-        return response.status(200).send(data).end();
+        responseHandler(error, request, response, data);
       });
     };
 
-    function doUpdate(requisition, response) {
-      var query = {_id: requisition.params.id};
+    function doUpdate(request, response) {
+      var query = {_id: request.params.id};
 
-      var update = requisition.body;
+      var update = request.body;
 
       applicationsModel.update(query, update, function(error, data) {
-        if (error) {
-          return response.status(400).send(error).end();
-        }
-
-        return response.status(200).send(data).end();
+        responseHandler(error, request, response, data);
       });
     };
 
-    function doDelete(requisition, response) {
-      var query = {_id: requisition.params.id};
+    function doDelete(request, response) {
+      var query = {_id: request.params.id};
 
       applicationsModel.remove(query, function(error, data) {
-        if (error) {
-          return response.status(400).send(error).end();
-        }
-
-        return response.status(200).send(data).end();
+        responseHandler(error, request, response, data);
       });
     };
 

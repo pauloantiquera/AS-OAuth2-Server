@@ -9,6 +9,7 @@
 
   function expressConfig(app, appConfig, dbHandler) {
     var applicationsModule = require(appConfig.app.modules + '/applications/api')(appConfig, dbHandler);
+    var responseHandler = require(appConfig.app.modules + '/apiutils/responseHandler');
 
     app.use(logger('dev'));
     app.use(bodyParser.json());
@@ -22,13 +23,13 @@
 
     app.use(methodOverride());
 
-    app.use(function(requisition, response, nextMiddleware) {
+    app.use(function(request, response, nextMiddleware) {
       var error = new Error('Not Found');
       error.status = 404;
-      nextMiddleware(error);
+      nextMiddleware(error, request, response);
     });
 
-    app.use(function(error, requisition, response, nextMiddleware) {
+    app.use(function(error, request, response, nextMiddleware) {
       response.status(error.status || 500).send(error.message).end();
     });
   };
