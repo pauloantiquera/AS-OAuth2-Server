@@ -51,10 +51,10 @@
     var uri = url.format({
       protocol: request.protocol,
       host: request.get('host'),
-      pathname: request.originalUrl + '/' + data
+      pathname: request.originalUrl + '/' + data._id
     });
 
-    response.status(201).location(uri).send(uri);
+    response.status(201).location(uri).send(data);
   };
 
   function responseBuilderForPutMethod(request, response, data) {

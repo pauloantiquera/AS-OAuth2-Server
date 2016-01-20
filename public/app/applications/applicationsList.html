@@ -1,27 +1,33 @@
 <div class="container">
-  <h1>{{appListCtrl.title}}</h1>
-
-  <table class="table table-hover table-responsive">
-    <thead>
-      <tr>
-        <th>App Id</th>
-        <th>App Name</th>
-        <th>Client Id</th>
-        <th class="text-center col-lg-1"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="application in appListCtrl.applicationsList" ng-dblclick="appListCtrl.editApplication(application)">
-        <td>{{application._id}}</td>
-        <td>{{application.appName}}</td>
-        <td>{{application.clientId}}</td>
-        <td class="text-center col-lg-1">
-          <div class="btn-group">
-            <button class="btn btn-xs" ng-click="appListCtrl.editApplication(application)"><span class="glyphicon glyphicon-pencil"></span></button>
-            <button class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></button>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="page-header row">
+    <h1>{{appListCtrl.title}}</h1>    
+  </div>
+  <div class="row pull-right">
+    <button class="btn btn-primary" ng-click="appListCtrl.createApplication()"><span class="glyphicon glyphicon-plus"><strong>&nbsp;New</strong></span></button>
+  </div>
+  <div class="row">
+    <table class="table table-hover table-responsive">
+      <thead>
+        <tr>
+          <th>App Id</th>
+          <th>App Name</th>
+          <th>Client Id</th>
+          <th class="text-center col-lg-1"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="application in appListCtrl.applicationsList" ng-dblclick="appListCtrl.editApplication(application)">
+          <td>{{application._id}}</td>
+          <td>{{application.appName}}</td>
+          <td>{{application.clientId}}</td>
+          <td class="text-center col-lg-1">
+            <div class="btn-group">
+              <button class="btn btn-xs" ng-click="appListCtrl.editApplication(application)"><span class="glyphicon glyphicon-pencil"></span></button>
+              <button class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>    
+  </div>
 </div>

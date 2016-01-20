@@ -34,7 +34,7 @@
       var newApplication = new applicationsModel(data);
 
       newApplication.save(function(error, data) {
-        responseHandler(error, request, response, data._id);
+        responseHandler(error, request, response, data);
       });
     };
 

@@ -44,24 +44,37 @@
               );
         };
 
-        function getModalConfig(application) {
+        function getModalConfig() {
           return {
             animation: true,
             templateUrl: 'app/applications/applicationForm.html',
             controller: 'applicationFormController as appFormCtrl',
             size: 'lg',
             backdrop: 'static',
-            keyboard: false,
-            resolve: {
-              application: function() {
-                return application.$get();
-              }
-            }
+            keyboard: false
           };
         };
 
         function openModalForEditing(application) {
-          var modalConfig = getModalConfig(application);
+          var modalConfig = getModalConfig();
+          
+          modalConfig.resolve = {
+            application: function() {
+              return application.$get();
+            }
+          };
+
+          return $uibModal.open(modalConfig);
+        };
+
+        function openModalForCreating(application) {
+          var modalConfig = getModalConfig();
+
+          modalConfig.resolve = {
+            application: function() {
+              return application;
+            }
+          };
 
           return $uibModal.open(modalConfig);
         };
@@ -74,6 +87,11 @@
         function discardChanges(application) {
           application.$get();
         };
+
+        function saveCreatedApplication(application) {
+          application.$save();
+          self.applicationsList.push(application);
+        };
         /* *************************** */
 
         /* Public Methods Declaration */
@@ -85,6 +103,17 @@
               .then(
                 saveEditedApplication,
                 discardChanges
+              );
+        };
+
+        self.createApplication = function() {
+          var application = new applicationsResource();
+          var modalInstance = openModalForCreating(application);
+
+          modalInstance
+            .result
+              .then(
+                saveCreatedApplication
               );
         };
         /* ************************** */
