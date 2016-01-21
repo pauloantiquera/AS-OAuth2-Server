@@ -17,6 +17,6 @@
           url: '/applications',
           controller: 'applicationsListController as appListCtrl',
           templateUrl: '/app/applications/applicationsList.html'
-        });      
+        });
     };
 })();

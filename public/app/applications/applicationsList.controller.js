@@ -85,7 +85,12 @@
         };
 
         function discardChanges(application) {
-          application.$get();
+          try {
+            application.$get();
+          } catch(error) {
+            console.log(error);
+            fillApplicationsList();
+          }
         };
 
         function saveCreatedApplication(application) {
@@ -115,6 +120,19 @@
               .then(
                 saveCreatedApplication
               );
+        };
+
+        self.removeApplication = function(application) {
+          application.$remove([],fillApplicationsList);
+
+        };
+
+        self.putApplicationOnRemovingMode = function(application) {
+          application.onRemovingMode = true;
+        };
+
+        self.takeApplicationFormRemovingMode = function(application) {
+          delete application.onRemovingMode;
         };
         /* ************************** */
 
