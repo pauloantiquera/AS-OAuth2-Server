@@ -9,7 +9,7 @@
 
   function expressConfig(app, appConfig, dbHandler) {
     var applicationsModule = require(appConfig.app.modules + '/applications/api')(appConfig, dbHandler);
-    var responseHandler = require(appConfig.app.modules + '/apiutils/responseHandler');
+    var usersModule = require(appConfig.app.modules + '/users/api')(appConfig, dbHandler);    
 
     app.use(logger('dev'));
     app.use(bodyParser.json());
@@ -20,6 +20,7 @@
     
     app.use('/', express.static(appConfig.root + '/public'));
     app.use('/applications', applicationsModule);
+    app.use('/users', usersModule);
 
     app.use(methodOverride());
 

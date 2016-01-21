@@ -4,6 +4,7 @@
     angular
         .module('oauth2Server.assembly', [
           'Applications',
+          'Users',
           'ui.router'
         ])
         .config(oauth2ServerAssemblyConfig);

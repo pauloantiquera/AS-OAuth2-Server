@@ -3,15 +3,9 @@
     var uidGenerator = require('uid');
     var applicationsModel = require('./model')(appConfig, dbHandler);
     var responseHandler = require(appConfig.app.modules + '/apiutils/responseHandler');
+    var crudController = require(appConfig.app.modules + '/apiutils/crudControllerFactory')(applicationsModel, responseHandler);
+
     var uidLength = 32;
-
-    function doListAll(request, response, next) {
-      var query = {};
-
-      applicationsModel.find(query, function(error, data) {
-        responseHandler(error, request, response, data);        
-      });
-    };
 
     function generateUID() {
       return uidGenerator(uidLength);
@@ -26,60 +20,21 @@
     };
 
     function doCreate(request, response, next) {
-      var data = request.body;
-
-      data.clientId = generateClientId();
-      data.clientSecret = generateClientSecret();
+      request.body.clientId = generateClientId();
+      request.body.clientSecret = generateClientSecret();
       
-      var newApplication = new applicationsModel(data);
-
-      newApplication.save(function(error, data) {
-        responseHandler(error, request, response, data);
-      });
-    };
-
-    function doRetrieve(request, response) {
-      var query = {_id: request.params.id};
-
-      applicationsModel.findOne(query, function(error, data) {
-        if (!error && !data) {
-          error = {
-            status: 404,
-            message: 'Not found'
-          };
-        }
-        responseHandler(error, request, response, data);
-      });
-    };
-
-    function doUpdate(request, response) {
-      var query = {_id: request.params.id};
-
-      var update = request.body;
-
-      applicationsModel.update(query, update, function(error, data) {
-        responseHandler(error, request, response, data);
-      });
-    };
-
-    function doDelete(request, response) {
-      var query = {_id: request.params.id};
-
-      applicationsModel.remove(query, function(error, data) {
-        responseHandler(error, request, response, data);
-      });
-    };
+      crudController.create(request, response, next);
+    };    
 
     var controller = {
-      listAll: doListAll,
+      listAll: crudController.listAll,
       create: doCreate,
-      retrieve: doRetrieve,
-      update: doUpdate,
-      delete: doDelete
+      retrieve: crudController.retrieve,
+      update: crudController.update,
+      delete: crudController.delete
     };
 
     return controller;
-
   };
 
   module.exports = applicationsModuleController;

@@ -1,18 +1,9 @@
 (function() {
-  var express = require('express');
-
   function applicationsModuleApi(appConfig, dbHandler) {
-    var apiRouter = express.Router();
+    var applicationsController = require('./controller')(appConfig, dbHandler);
+    var applicationsCrudApi = require(appConfig.app.modules + '/apiutils/genericCrudApi')(applicationsController);
 
-    var applicationsController = require('./controller.js')(appConfig, dbHandler);
-
-    apiRouter.get('/', applicationsController.listAll);
-    apiRouter.get('/:id', applicationsController.retrieve);
-    apiRouter.post('/', applicationsController.create);
-    apiRouter.put('/:id', applicationsController.update);
-    apiRouter.delete('/:id', applicationsController.delete);
-
-    return apiRouter;
+    return applicationsCrudApi;
   };
 
   module.exports = applicationsModuleApi;
