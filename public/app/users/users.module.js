@@ -2,9 +2,7 @@
     'use strict';
 
     angular
-        .module('Users', [
-          'ngResource',
-          'ui.bootstrap',
+        .module('Users', [          
           'ui.router'
         ]);
 })();

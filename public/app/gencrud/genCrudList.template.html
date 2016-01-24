@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="page-header row">
+    <h1>{{crudListCtrl.title}} List</h1>
+  </div>
+  <div class="row pull-right" ng-if="crudListCtrl.hasMainActions()">
+    <div class="button-group">
+      <button ng-repeat="action in crudListCtrl.mainActions track by $index" class="btn btn-primary" ng-click="action.fn()"><span class="glyphicon glyphicon-{{action.glyphIcon}}">&nbsp;{{action.text}}</span></button>
+    </div>
+  </div>
+  <div class="row">&nbsp;</div>
+  <div class="row">&nbsp;</div>
+  <div class="row">
+    <table class="table table-hover table-responsive">
+      <thead>
+        <tr>
+          <th ng-repeat="field in crudListCtrl.model">{{field.label}}</th>
+          <th class="text-center col-lg-2" ng-if="crudListCtrl.hasItemActions()"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in crudListCtrl.itemList">
+          <td ng-repeat="field in crudListCtrl.model">{{item[field.name]}}</td>
+          
+          <td class="text-center col-lg-2" ng-if="crudListCtrl.hasItemActions()">
+            <div class="btn-group" ng-if="!item.onRemovingMode">
+              <button ng-repeat="itemAction in crudListCtrl.itemActions track by $index" class="btn btn-sm btn-{{itemAction.btn}}" ng-click="itemAction.fn(item)"><span class="glyphicon glyphicon-{{itemAction.glyphIcon}}"></span></button>
+            </div>
+            <div class="btn-group btn-xs" ng-if="item.onRemovingMode">
+              <div><small><strong>Remove?</strong></small></div>
+              <button class="btn btn-danger btn-xs" ng-click="crudListCtrl.remove(item)"><strong>Confirm</strong></button>
+              <button class="btn btn-xs" ng-click="crudListCtrl.takeItemFormRemovingMode(item)"><strong>Cancel</strong></button>
+            </div>
+          </td>
+        </tr>
+        <tr ng-if="crudListCtrl.itemList.length === 0">
+          <td colspan="10" class="text-center">No records found.</td>
+        </tr>
+      </tbody>
+    </table> 
+  </div>
+</div>

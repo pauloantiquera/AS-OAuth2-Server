@@ -5,6 +5,7 @@
         .module('oauth2Server.assembly', [
           'Applications',
           'Users',
+          'GenCrud',
           'ui.router'
         ])
         .config(oauth2ServerAssemblyConfig);

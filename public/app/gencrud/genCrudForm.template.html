@@ -1,0 +1,16 @@
+<div class="modal-header">
+  <h3>{{crudFormCtrl.title}}</h3>
+</div>
+<div class="modal-body">
+  <form name="userForm">
+    <div class="form-group" ng-repeat="field in crudFormCtrl.model" ng-if="crudFormCtrl.isVisible(field)">
+      <label>{{field.label}}</label>
+      <input type="{{field.type}}" class="form-control" ng-model="crudFormCtrl.item[field.name]" ng-if="crudFormCtrl.isReadWrite(field)"/>
+      <p class="form-control-static" ng-if="crudFormCtrl.isStaticAndVisible(field)">{{crudFormCtrl.item[field.name]}}</p>
+    </div>
+  </form>    
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary" ng-click="crudFormCtrl.save()" ng-disabled="!userForm.$dirty">Save</button>
+  <button class="btn btn-danger" ng-click="crudFormCtrl.cancel()">Cancel</button>  
+</div>
